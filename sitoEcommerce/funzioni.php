@@ -26,7 +26,7 @@ echo "<table>
         if (isset($_SESSION['email'])){
   		    echo '<td><a href="aggiungi-al-carrello.php?id='.$codice.'">LINK</a></td>';
           } else {
-          echo '<td></td>';
+          echo "<td></td>";
                  }
   		echo "</tr>";
   	    }
