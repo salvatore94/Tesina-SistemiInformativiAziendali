@@ -50,7 +50,7 @@ include_once($path);
 
 <h2 class="text-center">Catalogo Prodotti</h2>
 <hr>
-<div class="container">
+<div class="box-home">
 <?php
 	echo "<table>
   <thead>
