@@ -50,7 +50,7 @@ if (!empty($_SESSION['carrello'])){
       	<?php
       }
   }else {
-    echo 'Il carrello è vuoto.<br /><br /><a href="javascript:history.back();">Indietro</a>';
+    echo 'Il carrello è vuoto.<br /><br /><a href="index.php">Torna alla Home</a>';
 }
 
 ?>
