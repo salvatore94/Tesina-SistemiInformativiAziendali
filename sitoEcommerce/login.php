@@ -28,7 +28,6 @@ if(empty($_SESSION['email'])){
           } else{
             $_SESSION['email'] = $email;
           }
-    			$_SESSION['userid'] = $userid;
 
           header("location: index.php");
         }else {
