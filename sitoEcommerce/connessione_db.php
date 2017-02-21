@@ -1,5 +1,15 @@
 <?php
+//Questa pagina rappresenta il core del mio sistema, viene utilizzata per connettersi al database e
+//creare (qualora non esistessero) le due tabelle necessarie al funzionamento del sito
+
+//Importo i miei stili css
+$path = "css/style.css";
+include_once($path);
+
+//Il funzionamento del sistema è basato su variabili di sessione
 session_start();
+
+
 $db_hostname = 'localhost';
 $db_username = 'root';
 $db_password = '';

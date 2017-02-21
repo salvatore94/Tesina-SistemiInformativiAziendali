@@ -1,5 +1,6 @@
 <?php
 include('connessione_db.php');
+
 if (empty($_SESSION['carrello'])) {
   header("Location: index.php");
 }

@@ -1,9 +1,6 @@
 <?php
 include('connessione_db.php');
 
-$path = "css/style.css";
-include_once($path);
-
 if (!empty($_SESSION['carrello'])){
       ?> <div class="box-home"><h2>Carrello</h2> <?php
 

@@ -1,12 +1,7 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<?php include("connessione_db.php");
-
-$path = "css/style.css";
-include_once($path);
-
-?>
+<?php include("connessione_db.php"); ?>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -30,7 +25,6 @@ include_once($path);
     </div>
     <div class="collapse navbar-collapse">
 			<?php
-
         if (!isset($_SESSION['userid'])) {
 					echo '<ul class="nav navbar-nav navbar-right hidden-sm"><li><a href="login.php">Accedi</a></li></ul>';
 					echo '<ul class="nav navbar-nav navbar-right hidden-sm"><li><a href="registrazione.php">Registrati</a></li></ul>';

@@ -1,8 +1,13 @@
 <?php
 include('connessione_db.php');
 
-$path = "css/style.css";
-include_once($path);
+//Simulazione del pagamento
+
+//Una volta completato il pagamento è necessario rimuovere i prodotti acquistati dall'inventario:
+//per fare ciò controllo la quantità che era disponibile prima dell'acquisto e vi sottraggo 1 (tolgo il prodotto acquistato)
+//se il valore trovato è >0 lo utilizzo per aggiornare la quantità disponibile altrimenti rimuovo dal catalogo il prodotto
+
+//Andato a buon fine l'aggiornamento del db, inizializzo il carrello reimpostando la variabile $_SESSION['carrello']
 if (!empty($_SESSION['carrello'])){
     if (isset($_POST['checkout'])) {
       $elemeti_del_carrello = count($_SESSION['carrello']);
