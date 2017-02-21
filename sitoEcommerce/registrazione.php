@@ -1,36 +1,9 @@
 <?php
 include('connessione_db.php');
-echo "<style>
-.login {
-  padding: 40px;
-  width: 274px;
-  background-color: #F7F7F7;
-  margin: 0 auto 10px;
-  border-radius: 2px;
-  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-  }
-.login-button {
-    width: 100%;
-    display: block;
-    margin-bottom: 10px;
-    position: relative;
-  }
-.login-label {
-    height: 44px;
-    font-size: 16px;
-    width: 100%;
-    margin-bottom: 10px;
-    -webkit-appearance: none;
-    background: #fff;
-    border: 1px solid #d9d9d9;
-    border-top: 1px solid #c0c0c0;
-    /* border-radius: 2px; */
-    padding: 0 8px;
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-  }
 
-  </style>";
+$path = "css/style.css";
+include_once($path);
+
 if (isset($_POST['registrati'])) {
 	$email = isset($_POST['email']) ? clear($_POST['email']) : false;
   $password = isset($_POST['password']) ? clear($_POST['password']) : false;
@@ -63,14 +36,18 @@ if (isset($_POST['registrati'])) {
         echo 'Errone nella query' .mysql_error();
       }
     }
+}elseif (isset($_POST['home'])) {
+  header("location: index.php");
 } else {
     ?>
-		<div class="login">
-    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
-      <label><input type="email" class="login-label" name="email" placeholder="Email" required maxlength="60" /></label><br />
-      <label><input type="password" class="login-label" name="password" placeholder="Password" required maxlength="20" /></label><br /><br />
-      <input type="submit" class="login-button" name="registrati" value="Registrati" />
-    </form>
+		<div class="box">
+      <h2>Registazione</h2>
+      <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
+        <label><input type="email" class="label" name="email" placeholder="Email"  maxlength="60" /></label><br />
+        <label><input type="password" class="label" name="password" placeholder="Password"  maxlength="20" /></label><br /><br />
+        <input type="submit" class="button" name="registrati" value="Registrati" />
+        <input type="submit" class="button" name="home" value="Torna alla Home" />
+      </form>
 	</div>
     <?php
 }

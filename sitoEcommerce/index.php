@@ -2,15 +2,11 @@
 <html lang="it">
 <head>
 <?php include("connessione_db.php");
-echo "<style>
-table {
-    border-spacing: 5px;
-		width: 90%;
 
-}
-</style>";
+$path = "css/style.css";
+include_once($path);
+
 ?>
-
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -25,23 +21,14 @@ table {
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
+
 <body>
 <nav>
   <div class="container">
-
-    <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
-      <a class="navbar-brand" href="#">Sito Ecommerce</a> </div>
-
-    <!-- Collect the nav links, forms, and other content for toggling -->
+      <a class="navbar-brand" href="#" >Sito Ecommerce</a>
+    </div>
     <div class="collapse navbar-collapse">
-<ul class="nav navbar-nav">
-        <li class="active"> </li>
-        <li> </li>
-      </ul>
-      <form class="navbar-form navbar-right" role="search">
-      </form>
 			<?php
 
         if (!isset($_SESSION['userid'])) {
@@ -50,33 +37,32 @@ table {
 				} else if(isset($_SESSION['userid'])) {
 					echo '<ul class="nav navbar-nav navbar-right hidden-sm"><li>'; echo $_SESSION['email']; echo ' </li></ul>';
 					echo '<ul class="nav navbar-nav navbar-right hidden-sm"><li><a href="logout.php">Esci</a></li></ul>';
+          echo '<ul class="nav navbar-nav navbar-right hidden-sm"><li><a href="carrello.php">Carrello</a></li></ul>';
 					if ($_SESSION['email'] == "ADMIN") {
 						echo '<ul class="nav navbar-nav navbar-right hidden-sm"><li><a href="aggiungi-prodotti.php">Aggiungi Prodotti</a></li></ul>';
 						echo '<ul class="nav navbar-nav navbar-right hidden-sm"><li><a href="rimuovi-prodotti.php">Rimuovi Prodotti</a></li></ul>';
 					}
 				}
 			?>
-      <ul class="nav navbar-nav navbar-right hidden-sm">
-        <li><a href="carrello.php">Carrello</a></li>
-      </ul>
     </div>
-    <!-- /.navbar-collapse -->
   </div>
-  <!-- /.container-fluid -->
 </nav>
-<hr>
+
 <h2 class="text-center">Catalogo Prodotti</h2>
 <hr>
 <div class="container">
 <?php
 	echo "<table>
-		<tr>
+  <thead>
+    <tr>
 	    <th>Nome Prodotto</th>
+      <th>Codice</th>
 	    <th>Quantità</th>
 			<th>Prezzo</th>
 	    <th>Descrizione</th>
-			<th>Aggiungi al Carrello</th>
-	  </tr>";
+      <th>Acquista</th>
+	  </tr>
+  </thead>";
 
 
 	$risultati = mysql_query("SELECT * FROM prodotti");
@@ -85,18 +71,17 @@ table {
 		  $codice = (int)$row["id"];
 			echo "<tr>
 							<td>".$row['nome']."</td>
+              <td>".$row['codice']."</td>
 			     		<td>".$row['quantita']."</td>
 							<td>".$row['prezzo']."</td>
-			  			<td>".$row['descrizione']."<td>";
-							echo '<td><a href="aggiungi-al-carrello.php?id='.$codice.'">link</a></td>';
+			  			<td>".$row['descrizione']."</td>";
+							echo '<td><a href="aggiungi-al-carrello.php?id='.$codice.'">LINK</a></td>';
 							echo "</tr>";
 
 	}
 	echo "</table>"
  ?>
 </div>
-<hr>
-<hr>
 <hr>
 <div class="container well">
     <div class="row">
@@ -112,10 +97,8 @@ table {
 
 <footer class="text-center">
   <div class="container">
-    <div class="row">
       <div class="col-xs-12">
         <p>Copyright © MyWebsite. All rights reserved.</p>
-      </div>
     </div>
   </div>
 </footer>
