@@ -20,8 +20,6 @@ if(empty($_SESSION['email'])){
         $password = md5($password);
         if(mysql_num_rows(mysql_query("SELECT * FROM utenti WHERE email LIKE '$email' AND password='$password'")) > 0) {
     			$email = mysql_result(mysql_query("SELECT email FROM utenti WHERE email LIKE '$email'"), 0);
-    			$userid = mysql_result(mysql_query("SELECT id FROM utenti WHERE email LIKE '$email'"), 0);
-
 
           if ($email == $admin_email) {
             $_SESSION['email'] = "ADMIN";

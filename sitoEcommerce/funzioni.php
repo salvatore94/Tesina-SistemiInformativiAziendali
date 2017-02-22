@@ -1,4 +1,15 @@
 <?php
+//La funzione clear($var) serve a "ripulire" le stringhe immesse nei vari form
+function clear($var) {
+	return addslashes(htmlspecialchars(trim($var)));
+}
+
+//La funzione creaTabellaHome() viene utilizzata per stampare in homepage una tabella contenente
+//i vari articoli presenti nella tabella prodotti del db
+//La riga di intestazione della tabella viene stampata  anche in assenza di elementi nella tabella prodotti del db
+
+//Qualora ci sia un utente loggato nel sistema verrà presentato, nell'ultima colonna della tabella,
+//il link per aggiungere al carrello il prodotto
 function creaTabellaHome(){
 echo "<table>
   <thead>
@@ -34,6 +45,10 @@ echo "<table>
 echo "</table>";
 }
 
+//La funzione creaTabellaCarrello() ha il duplice compito di stampare,
+//sotto forma di tabella, la lista dei prodotti inseriti nel carrello e
+//di calcolare l'importo totale della spesa
+//L'importo totale verrà immagazzinato nella variabile $somma che a sua volta verrà restituita come risultato della funzione
 function creaTabellaCarrello(){
   $carrello = $_SESSION['carrello'];
   $elemeti_del_carrello = count($carrello);

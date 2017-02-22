@@ -6,6 +6,9 @@
 $path = "css/style.css";
 include_once($path);
 
+//Le funzioni sono implementate in un .php esterno per non appessantire il codice delle varie pagine
+include("funzioni.php");
+
 //Il funzionamento del sistema è basato su variabili di sessione
 session_start();
 
@@ -26,7 +29,4 @@ if (!$connect){
   mysql_query("CREATE TABLE IF NOT EXISTS prodotti (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, nome VARCHAR(60) NOT NULL, codice INT NOT NULL, quantita INT NOT NULL, prezzo DOUBLE NOT NULL, descrizione VARCHAR(255))");
 }
 
-function clear($var) {
-	return addslashes(htmlspecialchars(trim($var)));
-}
 ?>

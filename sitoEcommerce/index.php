@@ -1,15 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<?php
-include("connessione_db.php");
-include("funzioni.php");
-?>
+<?php include("connessione_db.php"); ?>
 <title>Sito eCommerce </title>
 <!-- Bootstrap -->
 <link rel="stylesheet" href="css/bootstrap.css">
 </head>
-
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <body>
 <nav>
   <div class="container">
@@ -37,18 +34,20 @@ include("funzioni.php");
 
 <h2 class="text-center">Catalogo Prodotti</h2>
 <hr>
-<div class="box-home">
-<?php
-  creaTabellaHome();
-?>
+<div class="container">
+  <div class="box-home">
+  <?php creaTabellaHome(); ?>
+  </div>
 </div>
 <hr>
-<div class="box-info">
-        <strong>Salvatore Polito</strong><br>
-				<strong>Calogero Nicotra</strong><br>
-        <br>
-        Tesina di Sistemi Informativi Aziendali<br>
-  </div>
+<div class="container well">
+  <div class="box-info">
+          <strong>Salvatore Polito</strong><br>
+  				<strong>Calogero Nicotra</strong><br>
+          <br>
+          Tesina di Sistemi Informativi Aziendali<br>
+    </div>
+</div>
 <footer class="text-center">
         <br/>
         <p>Copyright © MyWebsite. All rights reserved.</p>
