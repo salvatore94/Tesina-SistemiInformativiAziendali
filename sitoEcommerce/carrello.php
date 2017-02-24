@@ -1,9 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Bootstrap -->
+<link rel="stylesheet" href="css/bootstrap.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Carrello</title>
+<body>
 <?php
 include("connessione_db.php");
 
 if (!empty($_SESSION['email'])) {
     if (!empty($_SESSION['carrello'])){
-          ?> <div class="box-home"><h2>Carrello</h2> <?php
+          ?><div class="container"> <div class="box-home"><h2>Carrello</h2> <?php
 
           if (isset($_POST['procedi'])) {
           header("location: checkout.php");
@@ -13,20 +20,30 @@ if (!empty($_SESSION['email'])) {
 
             $somma = creaTabellaCarrello();
 
-            ?>
-              <br/><br/><br/><div class="box-cart">
-              	<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
-              		<h3>Totale</h3> <h4> <?php echo $somma +  '  €';?> <br /> </h4>
-              		<input type="submit" class="button-cart" name="home" value="Torna alla Home" />
-                  <input type="submit" class="button-cart" name="procedi" value="Procedi con l'acqisto" />
-              	</form>
+            ?></div><br/><br/><br/>
+                <div class="box-cart">
+                  <div class="form-group">
+                  <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
+                		<h3>Totale</h3> <div align=center><br/><?php echo "<label>$somma €</lebel>";?><br/></div>
+                  </div>
+                  <div class="form-group" align=center>
+                		<input type="submit" class="btn btn-default" name="home" value="Torna alla Home" />
+                    <input type="submit" class="btn btn-default" name="procedi" value="Procedi con l'acqisto" />
+                	</form>
+                  </div>
+                </div>
               </div>
           	<?php
           }
       }else {
-        echo 'Il carrello è vuoto.<br /><br /><a href="index.php">Torna alla Home</a>';
+        stampaAvviso("Il carrello è vuoto", "index.php");
     }
 } else {
-  header("location: index.php")
+  header("location: index.php");
 }
 ?>
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="js/jquery-1.11.3.min.js"></script>
+<script src="js/bootstrap.js"></script>
+</body>
+</html>

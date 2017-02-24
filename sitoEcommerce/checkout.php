@@ -1,3 +1,10 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Bootstrap -->
+<link rel="stylesheet" href="css/bootstrap.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pagamento</title>
+<body>
 <?php
 include('connessione_db.php');
 
@@ -32,26 +39,36 @@ if (!empty($_SESSION['email'])){
             }
 
           $_SESSION['carrello'] = array();
-          echo 'Acquisto eseguito. <br /><br /><a href="index.php">Torna alla Home</a>';
+          stampaAvviso("Acquisto eseguito", "index.php");
         }elseif (isset($_POST['home'])) {
           header("location: index.php");
         } else{
           ?>
-          <div class="box">
-            <h2>Pagamento tramite PayPal</h2>
-            <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
-              <label><input type="email" class="label" name="email" placeholder="Email"  maxlength="60" /></label><br />
-              <label><input type="password" class="label" name="password" placeholder="Password"  maxlength="20" /></label><br /><br />
-              <input type="submit" class="button" name="checkout" value="Esegui" />
-              <input type="submit" class="button" name="home" value="Torna alla Home" />
-            </form>
+          <div clas="container">
+            <div class="box">
+              <h2>Pagamento tramite PayPal</h2><br/><br/>
+              <div class="form-group">
+              <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
+                <input type="text" class="form-control" name="email" placeholder="Email"  maxlength="60" /><br/>
+                <input type="text" class="form-control" name="password" placeholder="Password"  maxlength="20" /><br/>
+              <div class="form-group" align=center>
+                <input type="submit" class="btn btn-default"  name="checkout" value="Esegui" />
+                <input type="submit" class="btn btn-default" name="home" value="Torna alla Home" />
+              </div>
+              </form>
+            </div>
         </div>
-          <?php
+      <?php
         }
     }else{
-      echo 'Il carrello è vuoto, impossibile procedere al pagamento.<br /><br /><a href="index.php">Torna alla Home</a>';
+      stampaAvviso("Il carrello è vuoto, impossibile procedere al pagamento", "index.php");
     }
 } else {
-  header("location: index.php")
+  header("location: index.php");
 }
 ?>
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="js/jquery-1.11.3.min.js"></script>
+<script src="js/bootstrap.js"></script>
+</body>
+</html>

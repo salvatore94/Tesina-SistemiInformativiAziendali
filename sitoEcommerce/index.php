@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <?php include("connessione_db.php"); ?>
-<title>Sito eCommerce </title>
+<title>Sito eCommerce</title>
 <!-- Bootstrap -->
 <link rel="stylesheet" href="css/bootstrap.css">
 </head>
@@ -11,20 +11,20 @@
 <nav>
   <div class="container">
     <div class="navbar-header">
-      <a class="navbar-brand" href="#" >Sito Ecommerce</a>
+      <h2 class="navbar-brand">Sito Ecommerce</h2>
     </div>
-    <div class="collapse navbar-collapse">
+     <div class="collapse navbar-collapse">
 			<?php
-        if (!isset($_SESSION['email'])) {
-					echo '<ul class="nav navbar-nav navbar-right"><li><a href="login.php">Accedi</a></li></ul>';
-					echo '<ul class="nav navbar-nav navbar-right"><li><a href="registrazione.php">Registrati</a></li></ul>';
-				} else if(isset($_SESSION['email'])) {
-					echo '<ul class="nav navbar-nav navbar-right"><li>'; echo $_SESSION['email']; echo ' </li></ul>';
-					echo '<ul class="nav navbar-nav navbar-right"><li><a href="logout.php">Esci</a></li></ul>';
-          echo '<ul class="nav navbar-nav navbar-right"><li><a href="carrello.php">Carrello</a></li></ul>';
+        if (empty($_SESSION['email'])) {
+          stampaBottoniNavBar("Accedi", "login.php");
+          stampaBottoniNavBar("Registrati", "registrazione.php");
+				} else if(!empty($_SESSION['email'])) {
+          stampaNomeUtente($_SESSION['email']);
+          stampaBottoniNavBar("Esci", "logout.php");
+          stampaBottoniNavBar("Carrello", "carrello.php");
 					 if ($_SESSION['email'] == "ADMIN") {
-						echo '<ul class="nav navbar-nav navbar-right"><li><a href="aggiungi-prodotti.php">Aggiungi Prodotti</a></li></ul>';
-						echo '<ul class="nav navbar-nav navbar-right"><li><a href="rimuovi-prodotti.php">Rimuovi Prodotti</a></li></ul>';
+             stampaBottoniNavBar("Aggiungi Prodotti", "aggiungi-prodotti.php");
+             stampaBottoniNavBar("Rimuovi Prodotti", "rimuovi-prodotti.php");
 					}
 				}
 			?>
@@ -40,7 +40,7 @@
   </div>
 </div>
 <hr>
-<div class="container well">
+<div class="container">
   <div class="box-info">
           <strong>Salvatore Polito</strong><br>
   				<strong>Calogero Nicotra</strong><br>

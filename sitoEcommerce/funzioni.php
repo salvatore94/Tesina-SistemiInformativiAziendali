@@ -12,16 +12,16 @@ function clear($var) {
 //il link per aggiungere al carrello il prodotto
 function creaTabellaHome(){
 echo "<table>
-  <thead>
-     <tr>
-      	<th>Nome Prodotto</th>
-      	<th>Codice</th>
-      	<th>Quantità</th>
-      	<th>Prezzo</th>
-      	<th>Descrizione</th>
-      	<th>Acquista</th>
-    </tr>
-  </thead>";
+	  <thead>
+	     <tr>
+	      	<th><label>Nome Prodotto</label></th>
+	      	<th><label>Codice</label></th>
+	      	<th><label>Quantità</label></th>
+	      	<th><label>Prezzo</label></th>
+	      	<th><label>Descrizione</label></th>
+	      	<th><label>Acquista</label></th>
+	    </tr>
+	  </thead>";
 
 
   	$risultati = mysql_query("SELECT * FROM prodotti");
@@ -29,13 +29,13 @@ echo "<table>
   	while ($row = mysql_fetch_array($risultati)) {
   	 $codice = (int)$row["id"];
   		echo "<tr>
-  		<td>".$row['nome']."</td>
-      <td>".$row['codice']."</td>
-  		<td>".$row['quantita']."</td>
-  		<td>".$row['prezzo']."</td>
-  		<td>".$row['descrizione']."</td>";
+			<td><div style='padding: 8px' ><label>".$row['nome']."</label></div></td>
+      <td><label>".$row['codice']."</label></td>
+  		<td><label>".$row['quantita']."</label></td>
+  		<td><label>".$row['prezzo']." €</label></td>
+  		<td><label>".$row['descrizione']."<label></td>";
         if (isset($_SESSION['email'])){
-  		    echo '<td><a href="aggiungi-al-carrello.php?id='.$codice.'">LINK</a></td>';
+  		    echo '<td><label><a href="aggiungi-al-carrello.php?id='.$codice.'">LINK</a></label></td>';
           } else {
           echo "<td></td>";
                  }
@@ -55,12 +55,12 @@ function creaTabellaCarrello(){
   $somma=0;
   $id=0;
 
-  echo "<table>
+	echo "<table>
   <thead>
     <tr>
-      <th>Nome Prodotto</th>
-      <th>Prezzo</th>
-      <th>Rimuovi</th>
+      <th><label>Nome Prodotto</label></th>
+      <th><label>Prezzo</label></th>
+      <th><label>Rimuovi</label></th>
     </tr>
   </thead>";
 
@@ -69,17 +69,36 @@ function creaTabellaCarrello(){
     $risultati = mysql_query("SELECT * FROM prodotti WHERE id='$carrello[$i]'");
       while ($row = mysql_fetch_array($risultati)) {
 
-          echo "<tr>
-                  <td>".$row['nome']."</td>
-                  <td>".$row['prezzo']."</td>";
-                  echo '<td><a href="rimuovi-dal-carrello.php?id='.$i.'">Rimuovi</a></td>';
-                  echo "</tr>";
+					echo "<tr>
+									<td><div style='padding: 8px' ><label>".$row['nome']."</label></div></td>
+									<td><label>".$row['prezzo']." €</label></td>
+									<td><a href='rimuovi-dal-carrello.php?id='.$i.''>Rimuovi</a></td>
+								</tr>";
 
                   $somma = $somma + $row['prezzo'];
           }
     }
-  echo "</table></div>";
+  echo "</table>";
 
   return $somma;
+}
+function stampaBottoniNavBar($testo, $url){
+		echo '<ul class="nav navbar-nav navbar-right btn"><li><a class="nav navbar-nav navbar-right" href='.$url.'>'.$testo.'</a></li></ul>';
+}
+
+function stampaNomeUtente($email){
+	echo '<span class="navbar-text navbar-center">'.$email.'</span>';
+}
+
+function stampaAvviso($testo, $url){
+
+	?>
+	<div class="container">
+		<div class="box-info">
+			<h2><?php echo $testo; ?></h2>
+			<a href="<?php echo $url;?>">Indietro</a>
+		</div>
+	</div>
+ <?php
 }
 ?>
