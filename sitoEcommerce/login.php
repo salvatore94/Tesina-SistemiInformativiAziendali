@@ -50,7 +50,7 @@ if(empty($_SESSION['email'])){
           <div class="form-gruop" align=center>
             <input type="submit" class="btn btn-default" name="login" value="Accedi" />
           </div>
-      	  </form>
+        </form><br/>
           <?php tornaAllaHomeinForm(); ?>
         </div>
       </div>

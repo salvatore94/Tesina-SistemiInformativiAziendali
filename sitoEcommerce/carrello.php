@@ -28,7 +28,7 @@ if (!empty($_SESSION['email'])) {
                   </div>
                   <div class="form-group" align=center>
                     <input type="submit" class="btn btn-default" name="procedi" value="Procedi con l'acqisto" />
-                	</form>
+                	</form><br/>
                   <?php tornaAllaHomeinForm(); ?>
                   </div>
                 </div>
