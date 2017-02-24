@@ -27,9 +27,9 @@ if (!empty($_SESSION['email'])) {
                 		<h3>Totale</h3> <div align=center><br/><?php echo "<label>$somma €</lebel>";?><br/></div>
                   </div>
                   <div class="form-group" align=center>
-                		<input type="submit" class="btn btn-default" name="home" value="Torna alla Home" />
                     <input type="submit" class="btn btn-default" name="procedi" value="Procedi con l'acqisto" />
                 	</form>
+                  <?php tornaAllaHomeinForm(); ?>
                   </div>
                 </div>
               </div>
