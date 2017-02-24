@@ -15,8 +15,7 @@ include('connessione_db.php');
 //se il valore trovato è >0 lo utilizzo per aggiornare la quantità disponibile altrimenti rimuovo dal catalogo il prodotto
 
 //Andato a buon fine l'aggiornamento del db, inizializzo il carrello reimpostando la variabile $_SESSION['carrello']
-if (!empty($_SESSION['email'])){
-    if (!empty($_SESSION['carrello'])){
+if (!empty($_SESSION['email']) || !empty($_SESSION['carrello'])){
         if (isset($_POST['checkout'])) {
           $elemeti_del_carrello = count($_SESSION['carrello']);
           $carrello = $_SESSION['carrello'];
@@ -40,29 +39,25 @@ if (!empty($_SESSION['email'])){
 
           $_SESSION['carrello'] = array();
           stampaAvviso("Acquisto eseguito", "index.php");
-        }elseif (isset($_POST['home'])) {
-          header("location: index.php");
-        } else{
+        } else {
           ?>
           <div clas="container">
             <div class="box">
               <h2>Pagamento tramite PayPal</h2><br/><br/>
               <div class="form-group">
               <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
-                <input type="text" class="form-control" name="email" placeholder="Email"  maxlength="60" /><br/>
+                <input type="text" class="form-control" name="email" placeholder="Email" required maxlength="60" /><br/>
                 <input type="text" class="form-control" name="password" placeholder="Password"  maxlength="20" /><br/>
               <div class="form-group" align=center>
                 <input type="submit" class="btn btn-default"  name="checkout" value="Esegui" />
-                <input type="submit" class="btn btn-default" name="home" value="Torna alla Home" />
               </div>
               </form>
+              <br/>
+              <?php tornaAllaHomeinForm(); ?>
             </div>
         </div>
       <?php
         }
-    }else{
-      stampaAvviso("Il carrello è vuoto, impossibile procedere al pagamento", "index.php");
-    }
 } else {
   header("location: index.php");
 }

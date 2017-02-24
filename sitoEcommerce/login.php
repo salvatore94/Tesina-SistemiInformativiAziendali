@@ -38,22 +38,20 @@ if(empty($_SESSION['email'])){
            stampaAvviso("Password errata", "login.php");
           }
       }
-    } elseif (isset($_POST['home'])) {
-      header("location: index.php");
-    }else {
+    } else {
       ?><div class="container">
         <div class="box">
           <h2>Login</h2><br/>
         	<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
             <div class="form-group">
-        		<input type="email" class="form-control" name="email" placeholder="Email"  maxlength="60" /><br/>
-        		<input type="password" class="form-control" name="password" placeholder="Password"  maxlength="20" /><br/>
+        		<input type="email" class="form-control" name="email" placeholder="Email" required maxlength="60" /><br/>
+        		<input type="password" class="form-control" name="password" placeholder="Password" required maxlength="20" /><br/>
           </div>
           <div class="form-gruop" align=center>
             <input type="submit" class="btn btn-default" name="login" value="Accedi" />
-            <input type="submit" class="btn btn-default" name="home" value="Torna alla Home" />
           </div>
       	  </form>
+          <?php tornaAllaHomeinForm(); ?>
         </div>
       </div>
     	<?php

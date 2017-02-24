@@ -15,10 +15,7 @@ include('connessione_db.php');
 //di questo prodotto con i valori inseriti, altrimenti crea un nuovo prodotto
 //Il campo descrizione è opzionale (e può essere aggiornato in seguito) mentre i campi nome, codice, prezzo, quantità sono obbligatori:
 //il sistema rimanda ad una pagina d'errore se omessi
-if (!empty($_SESSION['email'])) {
-    if ($_SESSION['email'] != "ADMIN") {
-            stampaAvviso("Sezione non autorizzata", "index.php");
-    } else {
+if (!empty($_SESSION['email']) || $_SESSION['email'] != "ADMIN") {
         if (isset($_POST['inserisci'])){
           $nome = isset($_POST['nome']) ? clear($_POST['nome']) : false;
           $codice = isset($_POST['codice']) ? clear($_POST['codice']) : false;
@@ -26,9 +23,7 @@ if (!empty($_SESSION['email'])) {
           $descrizione = isset($_POST['descrizione']) ? clear($_POST['descrizione']) : false;
           $prezzo = isset($_POST['prezzo']) ? clear($_POST['prezzo']) : false;
 
-            if(empty($nome) || empty($prezzo) || empty($quantita) || empty($codice)) {
-              stampaAvviso("Riempi il campo nome, il campo codice, il campo quantità ed il campo prezzo", "aggiungi-prodotti.php");
-          	} elseif (mysql_num_rows(mysql_query("SELECT * FROM prodotti WHERE codice='$codice'")) > 0) {
+            if (mysql_num_rows(mysql_query("SELECT * FROM prodotti WHERE codice='$codice'")) > 0) {
               $id = mysql_result(mysql_query("SELECT id FROM prodotti WHERE codice='$codice'"), 0);
                 if(empty($descrizione)){
                   mysql_query("UPDATE prodotti SET quantita = '$quantita', prezzo = '$prezzo' WHERE id='$id'");
@@ -40,9 +35,8 @@ if (!empty($_SESSION['email'])) {
             } else {
               mysql_query("INSERT INTO prodotti (nome, codice, quantita, prezzo, descrizione) VALUES ('$nome', '$codice', '$quantita', '$prezzo', '$descrizione')");
             }
-          header("Location: index.php");
-        } elseif (isset($_POST['home'])) {
-          header("location: index.php");
+
+          stampaAvviso("Prodotto Aggiunto", "aggiungi-prodotti.php");
         } else {
           ?>
           <div clas="container">
@@ -50,24 +44,24 @@ if (!empty($_SESSION['email'])) {
               <h2>Aggiungi Prodotto dal Catalogo </h2><br/><br/>
               <div class="form-group">
               <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
-                <input type="text" class="form-control" name="nome" placeholder="Nome Prodotto"  maxlength="60" /><br/>
-                <input type="text" class="form-control" name="codice" placeholder="Codice Prodotto"  maxlength="11" /><br/>
-                <input type="text" class="form-control" name="quantita" placeholder="Quantità disponibile"  maxlength="11" /><br/>
-                <input type="text" class="form-control" name="prezzo" placeholder="Prezzo"  maxlength="11" /><br/>
+                <input type="text" class="form-control" name="nome" placeholder="Nome Prodotto" required maxlength="60" /><br/>
+                <input type="number" class="form-control" name="codice" placeholder="Codice Prodotto" required maxlength="11" /><br/>
+                <input type="text" class="form-control" name="quantita" placeholder="Quantità disponibile" required maxlength="11" /><br/>
+                <input type="text" class="form-control" name="prezzo" placeholder="Prezzo" required maxlength="11" /><br/>
                 <input type="text" class="form-control" name="descrizione" placeholder="Descrizione"  maxlength="255" /><br/>
               </div>
               <div class="form-group" align=center>
                 <input type="submit" class="btn btn-default"  name="inserisci" value="Inserisci" />
-                <input type="submit" class="btn btn-default" name="home" value="Torna alla Home" />
               </div>
               </form>
+            <?php tornaAllaHomeinForm(); ?>
             </div>
         </div>
           <?php
         }
-    }
+    
 } else {
-  header("location: index.php");
+  stampaAvviso("Sezione non autorizzata", "index.php");
 }
 ?>
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

@@ -90,13 +90,24 @@ function stampaNomeUtente($email){
 	echo '<span class="navbar-text navbar-center">'.$email.'</span>';
 }
 
+function tornaAllaHomeinForm(){
+	echo
+'	<div class="form-group" align=center>
+		<form action="index.php">
+			<input type="submit" class="btn btn-default" value="Torna alla Home" />
+		</form>
+	</div>';
+}
+
 function stampaAvviso($testo, $url){
 
 	?>
 	<div class="container">
 		<div class="box-info">
-			<h2><?php echo $testo; ?></h2>
-			<a href="<?php echo $url;?>">Indietro</a>
+			<h2><?php echo $testo; ?></h2><br/><br/>
+			<form action="<?php echo $url;?>">
+    		<input type="submit" class="btn btn-default" value="Indietro" />
+			</form>
 		</div>
 	</div>
  <?php
