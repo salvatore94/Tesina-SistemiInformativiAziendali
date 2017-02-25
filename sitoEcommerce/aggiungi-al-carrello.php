@@ -1,17 +1,25 @@
 <?php
 include('connessione_db.php');
-//Il carrello è un array contenente gli ID dei prodotti che vi si inseriscono
-//l'ID rappresenta la chiave primaria nella tabella prodotti ed è un INT che si autoincrementa
 
-//All'inizio della sessione $_SESSION['carrello'] non è definita perciò la inizializzo come array()
-if (empty($_SESSION['carrello'])) {
-  $_SESSION['carrello'] = array();
+$idProdotto = (INT)$_GET['idProdotto'];
+$idCliente = (INT)$_GET['idCliente'];
+
+$query = mysql_query("SELECT * FROM ordini WHERE idcliente='$idCliente' AND idprodotto='$idProdotto'");
+
+if (mysql_num_rows($query) > 0) {
+  $query = mysql_query("SELECT id FROM ordini WHERE idcliente='$idCliente' AND idprodotto='$idProdotto'");
+  $id = mysql_result($query, 0);
+
+  $query = mysql_query("SELECT quantita FROM ordini WHERE id='$id'");
+  $quantita = mysql_result($query, 0);
+  $quantita = $quantita + 1;
+
+  mysql_query("UPDATE ordini SET quantita='$quantita' WHERE id='$id'");
+} else {
+
+  mysql_query("INSERT INTO ordini (idcliente, idprodotto, quantita) VALUES ('$idCliente', '$idProdotto', 1)");
+
 }
 
-//Ogni volta che si vuole aggiungere un prodotto al carrello bisogna aprire questa pagina
-//passando l'ID del prodotto stesso.
-//Leggiamo l'ID tramite la variabile $_GET['id'] ed usiamo la funzione array_push() per inserire
-//questo valore all'interno dell'array.
-array_push($_SESSION['carrello'], (INT)$_GET['id']);
 header("Location: carrello.php")
 ?>

@@ -29,17 +29,18 @@ function creaTabellaHome(){
 
   	while ($row = mysql_fetch_array($risultati)) {
   	 $codice = (int)$row["id"];
-
+		 $prezzo = $row['prezzo'];
 	?>
 		<tr>
 			<td><div style='padding: 8px' ><label>".$row['nome']."</label></div></td>
-      <td><label>".$row['codice']."</label></td>
-  		<td><label>".$row['quantita']."</label></td>
-  		<td><label>".$row['prezzo']." €</label></td>
-  		<td><label>".$row['descrizione']."<label></td>
+      <td><label><?php echo $row['codice']; ?></label></td>
+  		<td><label><?php echo $row['quantita']; ?></label></td>
+  		<td><label><?php echo "$prezzo €"; ?></label></td>
+  		<td><label><?php echo $row['descrizione']; ?><label></td>
 		<?php
         if (isset($_SESSION['email'])){
-  		    ?> <td><label><a href="aggiungi-al-carrello.php?id=<?php echo $codice; ?>">LINK</a></label></td><?php
+					$idCliente = (int)$_SESSION['userid'];
+  		    ?> <td><label><a href="aggiungi-al-carrello.php?idCliente=<?php echo $idCliente; ?>&idProdotto=<?php echo $codice; ?>">LINK</a></label></td><?php
           } else {
           ?><td></td><?php
                  }
@@ -54,58 +55,74 @@ function creaTabellaHome(){
 //di calcolare l'importo totale della spesa
 //L'importo totale verrà immagazzinato nella variabile $somma che a sua volta verrà restituita come risultato della funzione
 function creaTabellaCarrello(){
-  $carrello = $_SESSION['carrello'];
-  $elemeti_del_carrello = count($carrello);
+	$idCliente = $_SESSION['userid'];
+	$query = mysql_query("SELECT * FROM ordini WHERE idCliente='$idCliente'");
+  $elemeti_del_carrello = mysql_num_rows($query);
   $somma=0;
-  $id=0;
-?>
-	<table>
-	  <thead>
-	    <tr>
-	      <th><label>Nome Prodotto</label></th>
-	      <th><label>Prezzo</label></th>
-	      <th><label>Rimuovi</label></th>
-	    </tr>
-	  </thead>
-<?php
+  $idProdotto=0;
+
+	?>
+		<table>
+		  <thead>
+		    <tr>
+		      <th><label>Nome Prodotto</label></th>
+		      <th><label>Prezzo</label></th>
+					<th><label>Quantità</label></th>
+		      <th><label>Rimuovi</label></th>
+		    </tr>
+		  </thead>
+	<?php
 
   for($i=0; $i < $elemeti_del_carrello; $i++){
-    $id = $carrello[$i];
-    $risultati = mysql_query("SELECT * FROM prodotti WHERE id='$carrello[$i]'");
+		$query_id = mysql_query("SELECT id FROM ordini WHERE idCliente='$idCliente'");
+		$query_quantita = mysql_query("SELECT quantita FROM ordini WHERE idCliente='$idCliente'");
+		$id = mysql_result($query_id, $i);
+		$quantita = mysql_result($query_quantita, $i);
+
+    $risultati = mysql_query("SELECT * FROM prodotti WHERE id='$id'");
       while ($row = mysql_fetch_array($risultati)) {
+					?><tr>
+								<td><div style='padding: 8px' ><label><?php echo $row['nome']; ?></label></div></td>
+								<td><label><?php echo "$prezzo €"; ?></label></td>
+								<td><a href="rimuovi-dal-carrello.php?id='<?php echo $id; ?>">Rimuovi</a></td>
+								</tr>
+						<?php
 
-					echo "<tr>
-									<td><div style='padding: 8px' ><label>".$row['nome']."</label></div></td>
-									<td><label>".$row['prezzo']." €</label></td>
-									<td><a href='rimuovi-dal-carrello.php?id='.$i.''>Rimuovi</a></td>
-								</tr>";
-
-                  $somma = $somma + $row['prezzo'];
+						$prezzo = $row['prezzo'];
+						$prezzo = $prezzo * $quantita;
+						$somma = $somma + $prezzo;
           }
     }
-  echo "</table>";
+  ?></table><?php
 
   return $somma;
 }
+
 function stampaBottoniNavBar($testo, $url){
-		echo '<ul class="nav navbar-nav navbar-right btn"><li><a class="nav navbar-nav navbar-right" href='.$url.'>'.$testo.'</a></li></ul>';
+?>
+		<ul class="nav navbar-nav navbar-right btn">
+			<li>
+				<a class="nav navbar-nav navbar-right" href="<?php echo $url;?>"><?php echo $testo; ?></a>
+			</li>
+		</ul>
+<?php
 }
 
 function stampaNomeUtente($email){
-	echo '<span class="navbar-text navbar-center">'.$email.'</span>';
+	?><span class="navbar-text navbar-center"><?php echo $email; ?></span><?php
 }
 
 function tornaAllaHomeinForm(){
-	echo
-'	<div class="form-group" align=center>
+?>
+<div class="form-group" align=center>
 		<form action="index.php">
 			<input type="submit" class="btn btn-default" value="Torna alla Home" />
 		</form>
-	</div>';
+	</div>
+<?php
 }
 
 function stampaAvviso($testo, $url){
-
 	?>
 	<div class="container">
 		<div class="box-info">

@@ -1,11 +1,17 @@
 <?php
 include('connessione_db.php');
 
-if (empty($_SESSION['carrello'])) {
-  header("Location: index.php");
+$id = (int)$_GET['id'];
+$query = mysql_query("SELECT quantita FROM ordini WHERE id='$id'");
+$quantita = mysql_result($query, 0);
+
+if($quantita > 1) {
+  $quantita = $quantita - 1;
+
+  mysql_query("UPDATE ordini SET quantita='$quantita' WHERE id='$id'");
+} else {
+  mysql_query("DELETE FROM ordini WHERE id='$id'");
 }
 
-unset($_SESSION['carrello'][$_GET['id']]);
-array_values();
 header("Location: carrello.php");
 ?>
