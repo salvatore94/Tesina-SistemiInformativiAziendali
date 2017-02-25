@@ -11,7 +11,8 @@ function clear($var) {
 //Qualora ci sia un utente loggato nel sistema verrà presentato, nell'ultima colonna della tabella,
 //il link per aggiungere al carrello il prodotto
 function creaTabellaHome(){
-echo "<table>
+?>
+	<table>
 	  <thead>
 	     <tr>
 	      	<th><label>Nome Prodotto</label></th>
@@ -21,28 +22,31 @@ echo "<table>
 	      	<th><label>Descrizione</label></th>
 	      	<th><label>Acquista</label></th>
 	    </tr>
-	  </thead>";
-
+	  </thead>
+<?php
 
   	$risultati = mysql_query("SELECT * FROM prodotti");
 
   	while ($row = mysql_fetch_array($risultati)) {
   	 $codice = (int)$row["id"];
-  		echo "<tr>
+
+	?>
+		<tr>
 			<td><div style='padding: 8px' ><label>".$row['nome']."</label></div></td>
       <td><label>".$row['codice']."</label></td>
   		<td><label>".$row['quantita']."</label></td>
   		<td><label>".$row['prezzo']." €</label></td>
-  		<td><label>".$row['descrizione']."<label></td>";
+  		<td><label>".$row['descrizione']."<label></td>
+		<?php
         if (isset($_SESSION['email'])){
-  		    echo '<td><label><a href="aggiungi-al-carrello.php?id='.$codice.'">LINK</a></label></td>';
+  		    ?> <td><label><a href="aggiungi-al-carrello.php?id=<?php echo $codice; ?>">LINK</a></label></td><?php
           } else {
-          echo "<td></td>";
+          ?><td></td><?php
                  }
-  		echo "</tr>";
+  		?></tr><?php
   	    }
 
-echo "</table>";
+?></table><?php
 }
 
 //La funzione creaTabellaCarrello() ha il duplice compito di stampare,
@@ -54,15 +58,16 @@ function creaTabellaCarrello(){
   $elemeti_del_carrello = count($carrello);
   $somma=0;
   $id=0;
-
-	echo "<table>
-  <thead>
-    <tr>
-      <th><label>Nome Prodotto</label></th>
-      <th><label>Prezzo</label></th>
-      <th><label>Rimuovi</label></th>
-    </tr>
-  </thead>";
+?>
+	<table>
+	  <thead>
+	    <tr>
+	      <th><label>Nome Prodotto</label></th>
+	      <th><label>Prezzo</label></th>
+	      <th><label>Rimuovi</label></th>
+	    </tr>
+	  </thead>
+<?php
 
   for($i=0; $i < $elemeti_del_carrello; $i++){
     $id = $carrello[$i];
