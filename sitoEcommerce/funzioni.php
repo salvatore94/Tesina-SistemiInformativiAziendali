@@ -32,7 +32,7 @@ function creaTabellaHome(){
 		 $prezzo = $row['prezzo'];
 	?>
 		<tr>
-			<td><div style='padding: 8px' ><label>".$row['nome']."</label></div></td>
+			<td><div style='padding: 8px' ><label><?php echo $row['nome']; ?></label></div></td>
       <td><label><?php echo $row['codice']; ?></label></td>
   		<td><label><?php echo $row['quantita']; ?></label></td>
   		<td><label><?php echo "$prezzo €"; ?></label></td>
@@ -56,7 +56,7 @@ function creaTabellaHome(){
 //L'importo totale verrà immagazzinato nella variabile $somma che a sua volta verrà restituita come risultato della funzione
 function creaTabellaCarrello(){
 	$idCliente = $_SESSION['userid'];
-	$query = mysql_query("SELECT * FROM ordini WHERE idCliente='$idCliente'");
+	$query = mysql_query("SELECT * FROM ordini WHERE idCliente='$idCliente' AND pagato=false");
   $elemeti_del_carrello = mysql_num_rows($query);
   $somma=0;
   $idProdotto=0;
@@ -74,17 +74,23 @@ function creaTabellaCarrello(){
 	<?php
 
   for($i=0; $i < $elemeti_del_carrello; $i++){
-		$query_id = mysql_query("SELECT id FROM ordini WHERE idCliente='$idCliente'");
+		$query_id = mysql_query("SELECT idProdotto FROM ordini WHERE idCliente='$idCliente'");
 		$query_quantita = mysql_query("SELECT quantita FROM ordini WHERE idCliente='$idCliente'");
+		$query = mysql_query("SELECT id FROM ordini WHERE idCliente='$idCliente'");
+		$idOrdine = mysql_result($query, $i);
 		$id = mysql_result($query_id, $i);
 		$quantita = mysql_result($query_quantita, $i);
+
+		$query = mysql_query("SELECT prezzo FROM prodotti WHERE id='$id'");
+		$prezzo = mysql_result($query, 0);
 
     $risultati = mysql_query("SELECT * FROM prodotti WHERE id='$id'");
       while ($row = mysql_fetch_array($risultati)) {
 					?><tr>
 								<td><div style='padding: 8px' ><label><?php echo $row['nome']; ?></label></div></td>
 								<td><label><?php echo "$prezzo €"; ?></label></td>
-								<td><a href="rimuovi-dal-carrello.php?id='<?php echo $id; ?>">Rimuovi</a></td>
+								<td><label><?php echo $quantita; ?></label></td>
+								<td><a href="rimuovi-dal-carrello.php?id=<?php echo $idOrdine; ?>">Rimuovi</a></td>
 								</tr>
 						<?php
 
@@ -96,6 +102,41 @@ function creaTabellaCarrello(){
   ?></table><?php
 
   return $somma;
+}
+
+function creaTabellaOrdini(){
+
+	?>
+		<table>
+		  <thead>
+		    <tr>
+		      <th><label>Email Cliente</label></th>
+		      <th><label>ID Prodotto</label></th>
+					<th><label>Quantità</label></th>
+		    </tr>
+		  </thead>
+	<?php
+
+		$risultati = mysql_query("SELECT * FROM ordini WHERE pagato=true");
+      while ($row = mysql_fetch_array($risultati)) {
+				$idCliente = $row['idcliente'];
+				$query = mysql_query("SELECT email FROM utenti WHERE id='$idCliente'");
+				$email = mysql_result($query, 0);
+				$idProdotto = $row['idprodotto'];
+				$query = mysql_query("SELECT codice FROM prodotti WHERE id='$idProdotto'");
+				$codice = mysql_result($query, 0);
+				$quantita = $row['quantita'];
+
+				?>
+					<tr>
+						<td><div style="padding: 8px" ><label><?php echo $email; ?></label></div></td>
+						<td><label><?php echo $codice; ?></label></td>
+						<td><label><?php echo $quantita; ?></label></td>
+					</tr>
+				</table>
+			<?php
+			}
+
 }
 
 function stampaBottoniNavBar($testo, $url){

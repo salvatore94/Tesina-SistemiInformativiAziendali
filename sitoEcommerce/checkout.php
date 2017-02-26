@@ -10,7 +10,7 @@ include('connessione_db.php');
 
   if (isset($_POST['checkout'])) {
     $idCliente = $_SESSION['userid'];
-    $query = mysql_query("SELECT * FROM ordini WHERE idCliente='$idCliente'");
+    $query = mysql_query("SELECT * FROM ordini WHERE idCliente='$idCliente' AND pagato=false");
     $elemeti_del_carrello = mysql_num_rows($query);
 
     for ($i=0; $i < $elemeti_del_carrello; $i++) {
