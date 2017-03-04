@@ -9,10 +9,8 @@
 include("connessione_db.php");
 
 if (!empty($_SESSION['email'])) {
-  $idCliente = $_SESSION['userid'];
-  $query = mysql_query("SELECT * FROM ordini WHERE idCliente='$idCliente'");
-//  $elemeti_del_carrello = mysql_num_rows($query);
-    if (mysql_num_rows($query) > 0){
+
+    if (!emptyCart()){
 
                     ?><div class="container"> <div class="box-home"><h2>Carrello</h2> <?php
 

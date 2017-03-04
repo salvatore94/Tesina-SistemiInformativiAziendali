@@ -11,13 +11,14 @@ include('connessione_db.php');
   if (isset($_POST['checkout'])) {
     $idCliente = $_SESSION['userid'];
     $query = mysql_query("SELECT * FROM ordini WHERE idCliente='$idCliente' AND pagato=false");
-    $elemeti_del_carrello = mysql_num_rows($query);
+    $elementi_del_carrello = mysql_num_rows($query);
 
-    for ($i=0; $i < $elemeti_del_carrello; $i++) {
-      $query_id = mysql_query("SELECT idprodotto FROM ordini WHERE idCliente='$idCliente'");
-      $query_quantita = mysql_query("SELECT quantita FROM ordini WHERE idCliente='$idCliente'");
-      $idProdotto = mysql_result($query_id, $i);
-      $quantitaProdotto = mysql_result($query_quantita, $i);
+    for ($i=0; $i < $elementi_del_carrello; $i++) {
+      $query = mysql_query("SELECT idprodotto FROM ordini WHERE idCliente='$idCliente'");
+      $idProdotto = mysql_result($query, $i);
+
+      $query = mysql_query("SELECT quantita FROM ordini WHERE idCliente='$idCliente'");
+      $quantitaProdotto = mysql_result($query, $i);
 
       $query = mysql_query("SELECT quantita FROM prodotti WHERE id='$idProdotto'");
       $quantita = mysql_result($query, 0);
@@ -33,9 +34,8 @@ include('connessione_db.php');
       $query = mysql_query("SELECT id FROM ordini WHERE idCliente='$idCliente' AND idprodotto='$idProdotto'");
       $id = mysql_result($query, 0);
       mysql_query("UPDATE ordini SET pagato=true WHERE id='$id'");
-
-      stampaAvviso("Acquisto eseguito", "index.php");
     }
+      stampaAvviso("Acquisto eseguito", "index.php");
   } else {
       ?>
       <div clas="container">

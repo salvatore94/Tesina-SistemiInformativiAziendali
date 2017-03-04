@@ -13,10 +13,15 @@ if (empty($_SESSION['email']) || $_SESSION['email'] != "ADMIN") {
     } else {
       ?><div class="container">
           <div class="box-home"><h2>Lista Ordini</h2>
-            <?php creaTabellaOrdini(); tornaAllaHomeinForm();?>
-          </div>
-          </div>
-      <?php
+            <?php creaTabellaOrdini();?>
+          </div><br/><br/><br/>
+
+                <div class="box-cart" align=center>
+
+                  <?php tornaAllaHomeinForm(); ?>
+                  </div>
+                </div>
+            <?php
     }
 ?>
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
