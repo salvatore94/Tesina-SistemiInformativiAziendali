@@ -13,6 +13,7 @@ if(empty($_SESSION['email'])){
 		if (isset($_POST['registrati'])) {
 			$email = isset($_POST['email']) ? clear($_POST['email']) : false;
 		  $password = isset($_POST['password']) ? clear($_POST['password']) : false;
+			$indirizzoFatturazione = isset($_POST['indirizzoFatturazione']) ? clear($_POST['indirizzoFatturazione']) : false;
 
 		  //E' necessario anche controllare che l'indirizzo email immesso non sia già presente all'interno del db
 			if(strlen($password) < 6){
@@ -27,7 +28,7 @@ if(empty($_SESSION['email'])){
 			      //Tutti i controlli sono stati superati qui, posso procedere all'inserimento dei dati nel db
 			      //La prima cosa da fare è criptare la password
 			      $password = md5($password);
-			      mysql_query("INSERT INTO utenti (email, password) VALUES ('$email','$password')");
+			      mysql_query("INSERT INTO utenti (email, password, indirizzoFatturazione) VALUES ('$email','$password','$indirizzoFatturazione')");
 
 						stampaAvviso("Registrazione eseguita", "index.php");
 			    }
@@ -40,6 +41,7 @@ if(empty($_SESSION['email'])){
 								<div class="form-group">
 								<input type="email" class="form-control" name="email" placeholder="Email" required maxlength="60" /><br/>
 				        <input type="password" class="form-control" name="password" placeholder="Password" required maxlength="20" /><br/>
+								<input type="text" class="form-control" name="indirizzoFatturazione" placeholder="Indirizzo Fatturazione" required maxlength="255" /><br/>
 							</div>
 							<div class="form-group" align=center>
 								<input type="submit" class="btn btn-default" name="registrati" value="Registrati" />

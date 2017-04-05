@@ -1,4 +1,5 @@
 <?php
+include("creazione_pdf.php");
 //La funzione clear($var) serve a "ripulire" le stringhe immesse nei vari form
 function clear($var) {
 	return addslashes(htmlspecialchars(trim($var)));
@@ -28,7 +29,7 @@ function creaTabellaHome(){
   	$risultati = mysql_query("SELECT * FROM prodotti");
 
   	while ($row = mysql_fetch_array($risultati)) {
-  	 $codice = (int)$row["id"];
+  	 $codice = (int)$row['id'];
 		 $prezzo = $row['prezzo'];
 	?>
 		<tr>
@@ -141,6 +142,40 @@ function creaTabellaOrdini(){
 	?></table><?php
 }
 
+function creaCronologiaAcquisti() {
+	?>
+		<table>
+			<thead>
+				<tr>
+					<th><label>Nome Prodotto</label></th>
+					<th><label>Quantità</label></th>
+					<th><label>Indirizzo di Spedizione</label></th>
+				</tr>
+			</thead>
+
+	<?php
+
+	$id = $_SESSION['userid'];
+	$risultati = mysql_query("SELECT * FROM ordini WHERE idCliente='$id' and pagato=true");
+		while ($row = mysql_fetch_array($risultati)) {
+			$idProdotto = $row['idprodotto'];
+			$quantita = $row['quantita'];
+			$indirizzoSpedizione = $row['indirizzoSpedizione'];
+
+			$query = mysql_query("SELECT nome FROM prodotti WHERE id='$idProdotto'");
+			$nomeProdotto = mysql_result($query, 0);
+
+			?>
+				<tr>
+					<td><div style="padding: 8px" ><label><?php echo $nomeProdotto; ?></label></div></td>
+					<td><label><?php echo $quantita; ?></label></td>
+					<td><label><?php echo $indirizzoSpedizione; ?></label></td>
+				</tr>
+		<?php
+		}
+?></table><?php
+}
+
 function emptyCart(){
 	$idCliente = $_SESSION['userid'];
 	$query = mysql_query("SELECT * FROM ordini WHERE idCliente='$idCliente' AND pagato=false");
@@ -185,5 +220,70 @@ function stampaAvviso($testo, $url){
 		</div>
 	</div>
  <?php
+}
+
+function creaPdfFattura() {
+	$idCliente = $_SESSION['userid'];
+	$query = mysql_query("SELECT * FROM ordini WHERE idCliente='$idCliente' AND pagato=true");
+	$elementi_del_carrello = mysql_num_rows($query);
+
+	$subtotale = 0;
+	$totale = 0;
+
+  $pdf = new PDF();
+
+    $pdf->AliasNbPages();
+    $pdf->AddPage();
+    $pdf->SetFont('Times','',12);
+    $pdf->SetTextColor(32);
+    $pdf->Cell(0,5,"sitoEcommerce",0,1,'R');
+    $pdf->Cell(0,5,"Universita degli Studi di Palermo",0,1,'R');
+    $pdf->Cell(0,5,"sitoEcommerce@unipa.it",0,1,'R');
+    $pdf->Cell(0,30,'',0,1,'R');
+    $pdf->SetFillColor(200,220,255);
+    $pdf->ChapterTitle('Numero di Fattura ',rand(20, 250));
+    $pdf->ChapterTitle('Data ',date('d-m-Y'));
+    $pdf->Cell(0,20,'',0,1,'R');
+    $pdf->SetFillColor(224,235,255);
+    $pdf->SetDrawColor(192,192,192);
+    $pdf->Cell(170,7,'Articolo',1,0,'L');
+    $pdf->Cell(20,7,'Prezzo',1,1,'C');
+		for ($i=0; $i < $elementi_del_carrello; $i++) {
+			$query = mysql_query("SELECT idprodotto FROM ordini WHERE idCliente='$idCliente'");
+      $idProdotto = mysql_result($query, $i);
+
+      $query = mysql_query("SELECT quantita FROM ordini WHERE idCliente='$idCliente'");
+      $quantitaProdotto = mysql_result($query, $i);
+
+			$query = mysql_query("SELECT prezzo FROM prodotti WHERE id='$idProdotto'");
+      $prezzo = mysql_result($query, 0);
+
+			$query = mysql_query("SELECT nome FROM prodotti WHERE id='$idProdotto'");
+			$nomeProdotto = mysql_result($query, 0);
+
+    	$pdf->Cell(170,7,$nomeProdotto,1,0,'L',0);
+    	$pdf->Cell(20,7,$prezzo * $quantitaProdotto,1,1,'C',0);
+
+			$subtotale = $subtotale + ($prezzo * $quantitaProdotto);
+		}
+    $pdf->Cell(0,0,'',0,1,'R');
+    $pdf->Cell(170,7,'Iva',1,0,'R',0);
+
+		$iva = (($subtotale * 22) / 100);
+    $pdf->Cell(20,7,$iva,1,1,'C',0);
+
+		$totale = $subtotale + $iva;
+    $pdf->Cell(170,7,'Totale',1,0,'R',0);
+    $pdf->Cell(20,7,$totale,1,0,'C',0);
+    $pdf->Cell(0,20,'',0,1,'R');
+
+		$query = mysql_query("SELECT indirizzoSpedizione FROM ordini WHERE idCliente='$idCliente' AND pagato=true");
+		$indirizzoSpedizione = mysql_result($query, 0);
+    $pdf->Cell(0,5,"Indirizzo di Spedizione",0,1,'L');
+    $pdf->Cell(0,5,$indirizzoSpedizione,0,1,'L');
+
+
+    $filename="fattura.pdf";
+    $pdf->Output($filename,'F');
 }
 ?>
