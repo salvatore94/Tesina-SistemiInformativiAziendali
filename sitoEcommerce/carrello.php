@@ -9,32 +9,34 @@
 include("connessione_db.php");
 
 if (!empty($_SESSION['email'])) {
-    if (!empty($_SESSION['carrello'])){
-          ?><div class="container"> <div class="box-home"><h2>Carrello</h2> <?php
 
-          if (isset($_POST['procedi'])) {
-          header("location: checkout.php");
-          }elseif (isset($_POST['home'])) {
-          header("location: index.php");
-          }else{
+    if (!emptyCart()){
 
-            $somma = creaTabellaCarrello();
+                    ?><div class="container"> <div class="box-home"><h2>Carrello</h2> <?php
 
-            ?></div><br/><br/><br/>
-                <div class="box-cart">
-                  <div class="form-group">
-                  <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
-                		<h3>Totale</h3> <div align=center><br/><?php echo "<label>$somma €</lebel>";?><br/></div>
-                  </div>
-                  <div class="form-group" align=center>
-                    <input type="submit" class="btn btn-default" name="procedi" value="Procedi con l'acqisto" />
-                	</form><br/>
-                  <?php tornaAllaHomeinForm(); ?>
-                  </div>
-                </div>
-              </div>
-          	<?php
-          }
+                    if (isset($_POST['procedi'])) {
+                    header("location: checkout.php");
+                    }else{
+
+                      $somma = creaTabellaCarrello();
+
+                      ?></div><br/><br/><br/>
+                          <div class="box-cart">
+                            <div class="form-group">
+                            <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
+                          		<h3>Totale</h3> <div align=center><br/><?php echo "<label>$somma €</lebel>";?><br/></div>
+                            </div>
+                            <div class="form-group" align=center>
+                              <input type="submit" class="btn btn-default" name="procedi" value="Procedi con l'acqisto" />
+                          	</form><br/><br/>
+                            <?php tornaAllaHomeinForm(); ?>
+                            </div>
+                          </div>
+                        </div>
+                    	<?php
+                    }
+
+
       }else {
         stampaAvviso("Il carrello è vuoto", "index.php");
     }

@@ -25,7 +25,10 @@
 					 if ($_SESSION['email'] == "ADMIN") {
              stampaBottoniNavBar("Aggiungi Prodotti", "aggiungi-prodotti.php");
              stampaBottoniNavBar("Rimuovi Prodotti", "rimuovi-prodotti.php");
-					}
+             stampaBottoniNavBar("Lista Ordini", "ordini.php");
+					} else {
+            stampaBottoniNavBar("Cronologia Acquisti", "cronologia_acquisti.php");
+          }
 				}
 			?>
     </div>

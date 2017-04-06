@@ -45,7 +45,7 @@ if (!empty($_SESSION['email']) || $_SESSION['email'] != "ADMIN") {
               <div class="form-group">
               <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
                 <input type="text" class="form-control" name="nome" placeholder="Nome Prodotto" required maxlength="60" /><br/>
-                <input type="number" class="form-control" name="codice" placeholder="Codice Prodotto" required maxlength="11" /><br/>
+                <input type="text" class="form-control" name="codice" placeholder="Codice Prodotto" required maxlength="11" /><br/>
                 <input type="text" class="form-control" name="quantita" placeholder="Quantità disponibile" required maxlength="11" /><br/>
                 <input type="text" class="form-control" name="prezzo" placeholder="Prezzo" required maxlength="11" /><br/>
                 <input type="text" class="form-control" name="descrizione" placeholder="Descrizione"  maxlength="255" /><br/>

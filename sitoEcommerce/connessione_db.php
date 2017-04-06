@@ -24,9 +24,9 @@ if (!$connect){
   echo "Connessione non riuscita";
 }else {
   mysql_select_db($db_name, $connect);
-  mysql_query("CREATE TABLE IF NOT EXISTS utenti (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, email VARCHAR(60) NOT NULL, password VARCHAR(32) NOT NULL)");
-  //Il campo password è lungo 32 caratteri perchè intendo utilizzare la cifratura md5
+  mysql_query("CREATE TABLE IF NOT EXISTS utenti (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, email VARCHAR(60) NOT NULL, password VARCHAR(32) NOT NULL, indirizzoFatturazione VARCHAR(255))");
   mysql_query("CREATE TABLE IF NOT EXISTS prodotti (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, nome VARCHAR(60) NOT NULL, codice INT NOT NULL, quantita INT NOT NULL, prezzo DOUBLE NOT NULL, descrizione VARCHAR(255))");
+  mysql_query("CREATE TABLE IF NOT EXISTS ordini (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, idcliente INT NOT NULL, idprodotto INT NOT NULL, quantita INT NOT NULL, indirizzoSpedizione VARCHAR(255), pagato BOOLEAN NOT NULL DEFAULT false)");
 }
 
 ?>

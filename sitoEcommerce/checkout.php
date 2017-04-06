@@ -8,59 +8,59 @@
 <?php
 include('connessione_db.php');
 
-//Simulazione del pagamento
+  if (isset($_POST['checkout'])) {
+    $idCliente = $_SESSION['userid'];
+    $indirizzoSpedizione = isset($_POST['indirizzoSpedizione']) ? clear($_POST['indirizzoSpedizione']) : false;
 
-//Una volta completato il pagamento è necessario rimuovere i prodotti acquistati dall'inventario:
-//per fare ciò controllo la quantità che era disponibile prima dell'acquisto e vi sottraggo 1 (tolgo il prodotto acquistato)
-//se il valore trovato è >0 lo utilizzo per aggiornare la quantità disponibile altrimenti rimuovo dal catalogo il prodotto
+    $query = mysql_query("SELECT * FROM ordini WHERE idCliente='$idCliente' AND pagato=false");
+    $elementi_del_carrello = mysql_num_rows($query);
 
-//Andato a buon fine l'aggiornamento del db, inizializzo il carrello reimpostando la variabile $_SESSION['carrello']
-if (!empty($_SESSION['email']) || !empty($_SESSION['carrello'])){
-        if (isset($_POST['checkout'])) {
-          $elemeti_del_carrello = count($_SESSION['carrello']);
-          $carrello = $_SESSION['carrello'];
-          $id=0;
-          $email = isset($_POST['email']) ? clear($_POST['email']) : false;
-          $password = isset($_POST['password']) ? clear($_POST['password']) : false;
+    for ($i=0; $i < $elementi_del_carrello; $i++) {
+      $query = mysql_query("SELECT idprodotto FROM ordini WHERE idCliente='$idCliente'");
+      $idProdotto = mysql_result($query, $i);
 
-            for($i=0; $i < $elemeti_del_carrello; $i++){
+      $query = mysql_query("SELECT quantita FROM ordini WHERE idCliente='$idCliente'");
+      $quantitaProdotto = mysql_result($query, $i);
 
-              $id = $carrello[$i];
-              $query = mysql_query("SELECT quantita FROM prodotti WHERE id='$id'");
-              $quantita_precedente = mysql_result($query, 0);
-              $quantita = $quantita_precedente - 1;
+      $query = mysql_query("SELECT quantita FROM prodotti WHERE id='$idProdotto'");
+      $quantita = mysql_result($query, 0);
 
-                if ($quantita > 0 ) {
-                  mysql_query("UPDATE prodotti SET quantita = '$quantita' WHERE id='$id'");
-                } else {
-                  mysql_query("DELETE FROM prodotti WHERE id='$id'");
-                }
-            }
+      if (($quantita - $quantitaProdotto) > 0) {
+        $quantita = $quantita - $quantitaProdotto;
 
-          $_SESSION['carrello'] = array();
-          stampaAvviso("Acquisto eseguito", "index.php");
-        } else {
-          ?>
-          <div clas="container">
-            <div class="box">
-              <h2>Pagamento tramite PayPal</h2><br/><br/>
-              <div class="form-group">
-              <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
-                <input type="text" class="form-control" name="email" placeholder="Email" required maxlength="60" /><br/>
-                <input type="text" class="form-control" name="password" placeholder="Password"  maxlength="20" /><br/>
-              <div class="form-group" align=center>
-                <input type="submit" class="btn btn-default"  name="checkout" value="Esegui" />
-              </div>
-              </form>
-              <br/>
-              <?php tornaAllaHomeinForm(); ?>
-            </div>
+        mysql_query("UPDATE prodotti SET quantita='$quantita' WHERE id='$idProdotto'");
+      } else {
+        mysql_query("DELETE FROM prodotti WHERE id='$idProdotto'");
+      }
+
+      $query = mysql_query("SELECT id FROM ordini WHERE idCliente='$idCliente' AND idprodotto='$idProdotto'");
+      $id = mysql_result($query, 0);
+      mysql_query("UPDATE ordini SET pagato=true WHERE id='$id'");
+      mysql_query("UPDATE ordini SET indirizzoSpedizione='$indirizzoSpedizione' WHERE id='$id'");
+    }
+      stampaAvviso("Acquisto eseguito", "index.php");
+      creaPdfFattura();
+  } else {
+      ?>
+      <div clas="container">
+        <div class="box">
+          <h2>Pagamento tramite PayPal</h2><br/><br/>
+          <div class="form-group">
+          <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
+            <input type="email" class="form-control" name="email" placeholder="Email" required maxlength="60" /><br/>
+            <input type="password" class="form-control" name="password" placeholder="Password"  maxlength="20" /><br/>
+            <input type="text" class="form-control" name="indirizzoSpedizione" placeholder="Indirizzo di spedizione"  maxlength="80" /><br/>
+          <div class="form-group" align=center>
+            <input type="submit" class="btn btn-default"  name="checkout" value="Esegui" />
+          </div>
+          </form>
+          <br/>
+          <?php tornaAllaHomeinForm(); ?>
         </div>
-      <?php
-        }
-} else {
-  header("location: index.php");
-}
+    </div>
+<?php
+  }
+
 ?>
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="js/jquery-1.11.3.min.js"></script>

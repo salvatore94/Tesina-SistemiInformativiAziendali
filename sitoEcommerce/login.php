@@ -32,7 +32,8 @@ if(empty($_SESSION['email'])){
           } else{
             $_SESSION['email'] = $email;
           }
-
+          $_SESSION['userid'] =  mysql_result(mysql_query("SELECT id FROM utenti WHERE email LIKE '$email'"), 0);
+          
           header("location: index.php");
         }else {
            stampaAvviso("Password errata", "login.php");
