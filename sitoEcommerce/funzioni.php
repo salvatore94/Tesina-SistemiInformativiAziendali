@@ -75,7 +75,7 @@ function creaTabellaCarrello(){
 	<?php
 
   for($i=0; $i < $elemeti_del_carrello; $i++){
-		$query = mysql_query("SELECT idProdotto FROM ordini WHERE idCliente='$idCliente'");
+		$query = mysql_query("SELECT idprodotto FROM ordini WHERE idCliente='$idCliente'");
 		$idProdotto = mysql_result($query, $i);
 
 		$query = mysql_query("SELECT id FROM ordini WHERE idCliente='$idCliente'");

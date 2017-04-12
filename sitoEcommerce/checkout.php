@@ -12,14 +12,14 @@ include('connessione_db.php');
     $idCliente = $_SESSION['userid'];
     $indirizzoSpedizione = isset($_POST['indirizzoSpedizione']) ? clear($_POST['indirizzoSpedizione']) : false;
 
-    $query = mysql_query("SELECT * FROM ordini WHERE idCliente='$idCliente' AND pagato=false");
+    $query = mysql_query("SELECT * FROM ordini WHERE idcliente='$idCliente' AND pagato=false");
     $elementi_del_carrello = mysql_num_rows($query);
 
     for ($i=0; $i < $elementi_del_carrello; $i++) {
-      $query = mysql_query("SELECT idprodotto FROM ordini WHERE idCliente='$idCliente'");
+      $query = mysql_query("SELECT idprodotto FROM ordini WHERE idcliente='$idCliente' AND pagato=false");
       $idProdotto = mysql_result($query, $i);
 
-      $query = mysql_query("SELECT quantita FROM ordini WHERE idCliente='$idCliente'");
+      $query = mysql_query("SELECT quantita FROM ordini WHERE idcliente='$idCliente' AND pagato=false");
       $quantitaProdotto = mysql_result($query, $i);
 
       $query = mysql_query("SELECT quantita FROM prodotti WHERE id='$idProdotto'");
@@ -33,7 +33,7 @@ include('connessione_db.php');
         mysql_query("DELETE FROM prodotti WHERE id='$idProdotto'");
       }
 
-      $query = mysql_query("SELECT id FROM ordini WHERE idCliente='$idCliente' AND idprodotto='$idProdotto'");
+      $query = mysql_query("SELECT id FROM ordini WHERE idcliente='$idCliente' AND idprodotto='$idProdotto'");
       $id = mysql_result($query, 0);
       mysql_query("UPDATE ordini SET pagato=true WHERE id='$id'");
       mysql_query("UPDATE ordini SET indirizzoSpedizione='$indirizzoSpedizione' WHERE id='$id'");
